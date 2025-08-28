@@ -64,7 +64,7 @@ app.delete("/items/:id", (req, res) => {
     const index = items.findIndex(item => item.id == itemId)
 
     if (index === -1) {
-        res.status(400).json({ error: "Item Not Found." })
+        res.status(404).json({ error: "Item Not Found." })
     } else {
         items.splice(index, 1)
         res.status(200).json({ message: "Item Deleted Successfully." })
