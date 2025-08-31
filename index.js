@@ -37,6 +37,24 @@ app.delete("/movies/:id", (req, res) => {
     }
 })
 
+app.post("/movies/:id", (req, res) => {
+    const movieId = parseInt(req.params.id)
+    const updatedMovieData = req.body
+
+    const movieToUpdate = movies.find(movie => movie.id === movieId)
+
+    if(!movieToUpdate){
+        res.status(404).json({error: "Movie not found."})
+    }else{
+        if(!updatedMovieData.title || !updatedMovieData.director || !updatedMovieData.year){
+            res.status(400).json({error: "Title, director and year are required."})
+        }else{
+            Object.assign(movieToUpdate, updatedMovieData)
+            res.status(201).json({message: "Movie data updated successfully."})
+        }
+    }
+})
+
 app.get("/movies", (req, res) => {
     res.send(movies)
 })
@@ -64,10 +82,28 @@ app.delete("/items/:id", (req, res) => {
     const index = items.findIndex(item => item.id == itemId)
 
     if (index === -1) {
-        res.status(400).json({ error: "Item Not Found." })
+        res.status(404).json({ error: "Item Not Found." })
     } else {
         items.splice(index, 1)
         res.status(200).json({ message: "Item Deleted Successfully." })
+    }
+})
+
+app.post("/items/:id", (req, res) => {
+    const itemId = parseInt(req.params.id)
+    const updatedItemData = req.body
+
+    const itemToUpdate = items.find(item => item.id === itemId)
+
+    if(!itemToUpdate){
+        res.status(404).json({error: "Item not found."})
+    }else{
+        if(!updatedItemData.itemName || !updatedItemData.color || !updatedItemData.quantity){
+            res.status(400).json({error: "Itemname, color and quantity are required."})
+        }else{
+            Object.assign(itemToUpdate, updatedItemData)
+            res.status(201).json({message: "Item data updated successfully."})
+        }
     }
 })
 
